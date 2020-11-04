@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
-class ExampleController extends Controller
+use App\Services\MilhasService;
+class FlightController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -13,6 +13,10 @@ class ExampleController extends Controller
     {
         //
     }
-
+    public function index()
+    {
+        $milhas = new MilhasService();
+        dd($milhas->getAllFlights());
+    }
     //
 }

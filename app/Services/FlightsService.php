@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Factory\GuzzleFactory;
 
-class MilhasService
+class FlightsService
 {
     private $urlApi;
 

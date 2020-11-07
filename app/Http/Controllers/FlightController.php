@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Services\MilhasService;
+use App\Services\BusinessGroupFlightService;
 class FlightController extends Controller
 {
     /**
@@ -15,8 +15,7 @@ class FlightController extends Controller
     }
     public function index()
     {
-        $milhas = new MilhasService();
-        dd($milhas->getAllFlights());
+       return "teste";
     }
     //
 }

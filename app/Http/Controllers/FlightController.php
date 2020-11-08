@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Services\BusinessGroupFlightService;
+use App\Services\BusinessFlightsService;
 class FlightController extends Controller
 {
     /**
@@ -15,7 +15,9 @@ class FlightController extends Controller
     }
     public function index()
     {
-       return "teste";
+        $businessService = new BusinessFlightsService();
+        return json_encode($businessService->formatResult());
+
     }
     //
 }

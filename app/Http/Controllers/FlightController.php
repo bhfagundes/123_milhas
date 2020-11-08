@@ -16,7 +16,7 @@ class FlightController extends Controller
     public function index()
     {
         $businessService = new BusinessFlightsService();
-        return json_encode($businessService->formatResult());
+        return $businessService->formatResult();
 
     }
     //

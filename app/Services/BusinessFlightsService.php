@@ -14,47 +14,6 @@ class BusinessFlightsService
         $this->flights = $flights->getAllFlights();
 
     }
-    public function groupByFareInboundOutbound()
-    {
-        $arrInbound = [];
-        $arrOutbound = [];
-        $response = new stdClass();
-        for($i=0;$i<sizeof($this->flights);$i++)
-        {
-            if($this->flights[$i]->inbound == 1)
-            {
-                array_push($arrInbound[$this->flights[$i]->fare],$i);
-            }
-            else
-            {
-                array_push($arrOutbound[$this->flights[$i]->fare],$i);
-            }
-        }
-        $response->inbound = $arrInbound;
-        $response->outbound = $arrOutbound;
-        return $response;
-    }
-    public function priceCombinedFare($data)
-    {
-        $result = [];
-        $sums = [];
-        $elements = new stdClass();
-        foreach ($data->inbound as $key => $value)
-        {
-            for ($i=0;$i<sizeof($data->inbound[$key]);$i++)
-            {
-                for($j=0; $j<sizeof($data->outbound[$key]);$j++)
-                {
-                    $sum = $data->outbound[$key][$j]->price + $data->inbound[$key][$i]->price;
-                    $elements->inbound = $data->inbound[$key][$i];
-                    $elements->outbound  = $data->outbound[$key][$j];
-                    array_push($result[$key][$sum],$elements);
-                    array_push($sums,$sum);
-                }
-            }
-        }
-
-    }
     public function firstCriteria()
     {
         $inboundFarePrice = [];
@@ -114,6 +73,30 @@ class BusinessFlightsService
         }
         return $resultSend;
     }
+    public function orderGroup($groups)
+    {
+        $arrPrice = [];
+        $arrFlag = [];
+        $response = [];
+        for($i=0;$i<sizeof($groups);$i++)
+        {
+            $arrPrice[]=$groups[$i]['totalPrice'];
+        }
+        sort($arrPrice);
+        for($i=0;$i<sizeof($arrPrice);$i++)
+        {
+            for($j=0; $j<sizeof($groups);$j++)
+            {
+                if($groups[$j]['totalPrice'] == $arrPrice[$i] &&  !in_array($j,$arrFlag))
+                {
+                    $arrFlag[]=$j;
+                    $response[$i] = $groups[$j];
+                    $j = sizeof($groups);
+                }
+            }
+        }
+        return $response;
+    }
     public function formatResult()
     {
         $price=0;
@@ -155,7 +138,7 @@ class BusinessFlightsService
             $i++;
         }
         $response['flights'] = $this->flights;
-        $response['groups']=$groups;
+        $response['groups']=$this->orderGroup($groups);
         $response['totalGrups']=$totalGroups;
         $response['totalFlights']=$totalFlights;
         $response['cheapestPrice']=$cheapestPrice;
